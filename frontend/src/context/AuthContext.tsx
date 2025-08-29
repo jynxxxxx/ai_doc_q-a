@@ -12,6 +12,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // call this on mount or when you want to refresh user
   const resetUser = async () => {
@@ -20,6 +21,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(res);
     } catch (err) {
       setUser(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
-      {children}
+      {loading ? <div>Loading...</div> : children}
     </AuthContext.Provider>
   );
 };

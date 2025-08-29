@@ -82,7 +82,7 @@ async def login(response: Response, data: dict = Body(...)):
         raise HTTPException(status_code=401, detail=str(e))
 
 @router.get("/me")
-async def get_me(request: Request):
+async def get_me(request: Request, response: Response):
     refresh_token = request.cookies.get("refresh_token")
     if not refresh_token:
         raise HTTPException(status_code=401, detail="Not authenticated")
@@ -93,8 +93,11 @@ async def get_me(request: Request):
     if res.session is None or res.user is None:
         raise HTTPException(status_code=401, detail="Invalid session")
 
-    # optionally set new refresh token in cookie (Supabase rotates it)
-    # response.set_cookie(key="refresh_token", value=res.session.refresh_token, httponly=True, samesite="strict")
+    response.set_cookie(
+        key="refresh_token",
+        value=res.session.refresh_token if res.session else "",
+        httponly=True,
+    )
 
     return {
         "data": {
