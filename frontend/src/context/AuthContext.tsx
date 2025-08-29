@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const res = await refreshUser()
       setUser(res);
     } catch (err) {
-      setUser(null);
+      console.error("Failed to refresh user, keeping existing state", err);
     } finally {
       setLoading(false);
     }
@@ -28,6 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     resetUser();
+    const interval = setInterval(resetUser, 1000 * 60 * 5); // every 5 min
+    return () => clearInterval(interval);
   }, []);
 
   return (

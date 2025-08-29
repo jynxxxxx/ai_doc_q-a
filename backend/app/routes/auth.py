@@ -105,3 +105,21 @@ async def get_me(request: Request, response: Response):
             "name": res.user.user_metadata.get("name"),
         }
     }
+
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie(
+        key="refresh_token",
+        httponly=True,
+    )
+
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        secure=True,           
+        samesite="none"       
+    )
+
+    return {
+        "data": "You have successfully logged out"
+    }

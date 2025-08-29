@@ -3,7 +3,6 @@ import type { Citation, Document } from "./types";
 
 const baseURL = "http://localhost:8000"
 
-
 export const signUp = async (data: any) => {
   const res = await axios.post(`${baseURL}/auth/signup`, data, {
     withCredentials: true,
@@ -14,6 +13,14 @@ export const signUp = async (data: any) => {
 
 export const login = async (data: any) => {
   const res = await axios.post(`${baseURL}/auth/login`, data, {
+    withCredentials: true,
+  });
+
+  return res.data;
+};
+
+export const logout = async () => {
+  const res = await axios.post(`${baseURL}/auth/logout`, {}, {
     withCredentials: true,
   });
 
