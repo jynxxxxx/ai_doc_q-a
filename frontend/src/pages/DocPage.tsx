@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 export default function DocPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDocuments = async () => {
@@ -21,13 +20,14 @@ export default function DocPage() {
     if (!confirm("Delete this document?")) return;
     await deleteDocument(docId);
     setDocuments((prev) => prev.filter((d) => d.id !== docId));
-    setPdfUrl("")
   };
 
   const handleView = async (docId: string) => {
     try {
       const url = await getDocumentURL(docId);
-      setPdfUrl(url)
+      const newTab = window.open(url, "_blank");
+      if (newTab) newTab.focus();
+      else toast.error("Please allow popups to view PDF.");
     } catch (err) {
       console.error("Failed to open document:", err);
       toast.error("Could not open PDF.")
@@ -67,10 +67,6 @@ export default function DocPage() {
               </div>
             ))}
           </div>
-
-          {pdfUrl && (
-            <iframe src={pdfUrl} width="100%" height="600px" style={{ border: "none" }} />
-          )}
         </>
       )}
     </div>
