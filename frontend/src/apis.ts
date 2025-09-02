@@ -40,12 +40,21 @@ export const refreshUser = async() => {
   return res.data;
 }
 
-export const uploadDocument = async (file: File): Promise<Document> => {
+export const uploadDocument = async (
+  file: File,
+  onProgress?: (progress: number) => void
+): Promise<Document> => {
   const formData = new FormData();
   formData.append("file", file);
 
   const res = await customAPI.post(`${baseURL}/documents/upload`, formData, {
     withCredentials: true,
+    onUploadProgress: (event) => {
+      if (event.total) {
+        const percent = Math.round((event.loaded * 100) / event.total);
+        if (onProgress) onProgress(percent);
+      }
+    },
   });
 
   return res.data;
