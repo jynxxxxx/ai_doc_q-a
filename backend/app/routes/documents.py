@@ -63,7 +63,7 @@ async def upload_file(
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Chroma add failed: {e}")
 
-        return {"user_id": user_id, "doc_id": doc.id, "filename": file.filename}
+        return {"user_id": user_id, "id": doc.id, "filename": file.filename}
     except HTTPException as e:
         return JSONResponse(status_code=e.status_code, content={"error": e.detail})
     except Exception as e:
