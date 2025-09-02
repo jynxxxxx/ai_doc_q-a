@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { uploadDocument } from "../apis";
-import type { Document } from "../types"; // adjust to your Document type
+import type { Document } from "../types";
 import { toast } from "sonner";
 import { Upload, FileText, X } from 'lucide-react';
 
@@ -8,7 +8,7 @@ type DocumentUploadProps = {
   onUploadComplete: (newDocs: Document[]) => void;
 };
 
-export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps) {
+export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState<Record<string, number>>({});
