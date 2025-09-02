@@ -48,8 +48,8 @@ export default function DocPage() {
           <span className="">Upload Documents</span>
         </div>
       </div>
-      
       <div className="h-pt border border-b mb-12"></div>
+
       {!documents || documents.length === 0 ? (
         <>
           <div className="text-center">You have no documents uploaded yet. Upload PDFs to get started.</div>            

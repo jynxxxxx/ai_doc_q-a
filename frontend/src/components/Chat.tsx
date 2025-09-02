@@ -75,41 +75,53 @@ export default function Chat() {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <div className="border rounded p-2 h-96 overflow-y-auto mb-2 flex flex-col gap-2">
-        {messages.map((msg, idx) => {
-          const isUser = msg.role ==="user"
-          const isAI = msg.role ==="ai"
+      <div className="border rounded p-8 h-96 overflow-y-auto mb-2 flex flex-col gap-2">
+        {messages.length === 0 ? (
+          <div className="text-gray-400 italic">
+            Ask me about any of your uploaded documents
+          </div>
+        ) : (
+          messages.map((msg, idx) => {
+            const isUser = msg.role ==="user"
+            const isAI = msg.role ==="ai"
 
-          return (
-            <>
-              <div key={idx} className={isUser ? "text-right" : "text-left"}>
-                <div className="inline-block bg-gray-100 px-2 py-1 rounded whitespace-pre-wrap">
-                  {/* If assistant message is still streaming, animate */}
-                  {isAI && idx === messages.length - 1 && streamingAnswer ? (
-                    <TypingVisual text={streamingAnswer} speed={15} />
-                  ) : (
-                    msg.text
+            return (
+              <>
+                <div key={idx} className={`mb-4 ${isUser ? "text-right" : "text-left"}`}>
+                  <div className={`inline-block bg-gray-100 px-2 py-1 rounded whitespace-pre-wrap ${isUser ? "max-w-md" : "max-w-lg"}`}>
+                    {/* If assistant message is still streaming, animate */}
+                    {isAI && idx === messages.length - 1 && streamingAnswer ? (
+                      <TypingVisual text={streamingAnswer} speed={15} />
+                    ) : (
+                      msg.text
+                    )}
+                  </div>
+                  {msg.citations && msg.citations.length > 0 && (
+                    <div className="text-xs text-gray-500 mt-1">
+                      Sources:
+                      <div className="flex gap-3">
+                        {Array.from(
+                          msg.citations?.reduce((map, c) => {
+                            if (!map.has(c.filename)) map.set(c.filename, c);
+                            return map;
+                          }, new Map<string, typeof msg.citations[0]>())?.values() || []
+                        ).map((c, i) => (
+                          <button
+                            key={i}
+                            className="block bg-gray-200 text-gray-600 hover:underline px-2 py-1"
+                            onClick={() => setHighlightChunk(c)}
+                          >
+                            {c.filename}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-                {msg.citations && msg.citations.length > 0 && (
-                  <div className="text-xs text-gray-500 mt-1">
-                    Sources:
-                    <div className="flex gap-3">
-                      {msg.citations?.map((c, i) => (
-                        <button
-                          key={i}
-                          className="block bg-gray-300 text-gray-600 hover:underline"
-                          onClick={() => setHighlightChunk(c)}
-                        >
-                          {c.filename}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </>
-          )})}
+              </>
+            );
+          })
+        )}
       </div>
 
       {/* Input area */}
@@ -124,13 +136,13 @@ export default function Chat() {
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
         <button
-          className="bg-green-600 text-white px-4 py-1 rounded"
+          className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
           onClick={handleSend}
         >
           Send
         </button>
         <button
-          className="bg-red-500 text-white px-4 py-1 rounded"
+          className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-700"
           onClick={handleCancel}
         >
           Cancel

@@ -3,7 +3,7 @@ import Chat from '../components/Chat'
 import DocUpload from '../components/DocUpload'
 import { getDocuments } from "../apis";
 import type { Document } from "../types";
-import { FileText, Eye, Trash2, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 
 function ChatPage() {

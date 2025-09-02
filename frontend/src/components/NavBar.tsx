@@ -21,7 +21,7 @@ export default function NavBar() {
   }
 
   return (
-    <div className="absolute top-0 h-full left-0 w-[15vw] bg-gray-200 flex flex-col justify-between p-8">
+    <div className="fixed top-0 h-full left-0 w-[15vw] bg-gray-200 flex flex-col justify-between p-8">
       <div className="flex flex-col gap-8">
         <div className="hover:text-gray-500" onClick={()=> navigate("/documents")}>Documents</div>
         <div className="hover:text-gray-500" onClick={()=> navigate("/chat")}>Chats</div>
