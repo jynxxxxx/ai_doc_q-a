@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
-import CitationPreview from "./CitationPreview";
-import type { ChatMessage, Citation } from "../types";
+import { useState, useRef, useEffect } from "react";
+// import CitationPreview from "./CitationPreview";
+import type { ChatMessage } from "../types";
 import { chatStream } from "../apis";
 import { TypingVisual } from "./TypingVisual";
 
@@ -8,16 +8,25 @@ export default function Chat() {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingAnswer, setStreamingAnswer] = useState("");
-  const [highlightChunk, setHighlightChunk] = useState<Citation | null>(null);
-  const textareaRef = useRef<HTMLInputElement>(null);
+  // const [highlightChunk, setHighlightChunk] = useState<Citation | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const newestMsgRef = useRef<HTMLDivElement | null>(null);
 
-
+  useEffect(() => {
+    if (chatContainerRef.current && newestMsgRef.current) {
+    chatContainerRef.current.scrollTo({
+      top: newestMsgRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  }
+}, [messages, streamingAnswer]);
   const handleSend = async () => {
     if (!question.trim()) return;
 
     setStreamingAnswer("");
-    setHighlightChunk(null);
+    // setHighlightChunk(null);
 
     abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
@@ -75,7 +84,7 @@ export default function Chat() {
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <div className="border rounded p-8 h-96 overflow-y-auto mb-2 flex flex-col gap-2">
+      <div ref={chatContainerRef} className="border rounded p-8 h-96 overflow-y-auto mb-2 flex flex-col gap-2">
         {messages.length === 0 ? (
           <div className="text-gray-400 italic">
             Ask me about any of your uploaded documents
@@ -122,6 +131,7 @@ export default function Chat() {
             );
           })
         )}
+        <div ref={newestMsgRef} />
       </div>
 
       {/* Input area */}
