@@ -36,7 +36,9 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
       }
     });
 
-    if (validFiles.length) setSelectedFiles(Array.from(validFiles));
+    if (validFiles.length) {
+      setSelectedFiles((prev) => [...prev, ...validFiles]);
+    }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
