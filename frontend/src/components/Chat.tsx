@@ -106,13 +106,13 @@ export default function Chat() {
                             return map;
                           }, new Map<string, typeof msg.citations[0]>())?.values() || []
                         ).map((c, i) => (
-                          <button
+                          <div
                             key={i}
-                            className="block bg-gray-200 text-gray-600 hover:underline px-2 py-1"
-                            onClick={() => setHighlightChunk(c)}
+                            className="block bg-gray-200 text-gray-600 px-2 py-1"
+                            // onClick={() => setHighlightChunk(c)}
                           >
                             {c.filename}
-                          </button>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -150,12 +150,12 @@ export default function Chat() {
       </div>
 
       {/* Document viewer */}
-      {highlightChunk && (
+      {/* {highlightChunk && (
         <CitationPreview
           filename={highlightChunk.filename}
           snippet={highlightChunk.snippet}
         />
-      )}
+      )} */}
     </div>
   );
 }
