@@ -46,7 +46,13 @@ export default function LoginPage() {
   };
 
   return (
-    <>
+    <div className="max-w-md mx-auto mt-20 p-8">
+      <div className="mb-8 text-center text-2xl font-bold">
+        {mode === "login" 
+          ? <div>Login</div>
+          : <div>Sign Up</div>
+        }
+      </div>
       <form onSubmit={handleSubmit} className="space-y-2">
         {mode === "signup" &&
           <input
@@ -77,17 +83,17 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full disabled:opacity-50"
         >
           {loading ? "Loading..." : mode === "login" ? "Login" : "Sign Up"}
         </button>
       </form>
       <div className="mt-4 text-center">
         {mode === "login" 
-          ? <span>Not registered?{" "}Click here to <button onClick={() => setMode("signup")}>sign up.</button></span>
-          : <span>Already registered?{" "}Click here to <button onClick={() => setMode("login")}>login.</button></span>
+          ? <span>Not registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("signup")}>sign up.</button></span>
+          : <span>Already registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("login")}>login.</button></span>
         }
       </div>
-    </>
+    </div>
   );
 }

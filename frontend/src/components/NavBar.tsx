@@ -21,12 +21,12 @@ export default function NavBar() {
   }
 
   return (
-    <div className="absolute top-0 bottom-0 left-0 w-1/10 bg-gray-200 flex flex-col justify-between py-8">
+    <div className="absolute top-0 h-full left-0 w-[15vw] bg-gray-200 flex flex-col justify-between p-8">
       <div className="flex flex-col gap-8">
-        <div onClick={()=> navigate("/documents")}>Documents</div>
-        <div onClick={()=> navigate("/chat")}>Chats</div>
+        <div className="hover:text-gray-500" onClick={()=> navigate("/documents")}>Documents</div>
+        <div className="hover:text-gray-500" onClick={()=> navigate("/chat")}>Chats</div>
       </div>
-      {user && <div onClick={handleLogout}>Logout</div>}
+      {user && <div className="hover:text-gray-500" onClick={handleLogout}>Logout</div>}
     </div>
   )
 }
