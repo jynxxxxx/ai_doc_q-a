@@ -3,6 +3,7 @@ import DocUpload from "../components/DocUpload";
 import type { Document } from "../types";
 import { deleteDocument, getDocuments, getDocumentURL } from "../apis";
 import { toast } from "sonner";
+import { FileText, Eye, Trash2 } from 'lucide-react';
 
 export default function DocPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -35,33 +36,38 @@ export default function DocPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <DocUpload onUploadComplete={(newDocs: any) => setDocuments([...documents, ...newDocs])} />
-
-      <h2 className="text-xl font-bold mb-4">Manage Documents</h2>
-      <h3 className="font-bold mb-2">Document Library</h3>
+    <div className="p-12">
+      <h2 className="text-left text-xl font-bold ml-12 mb-4 ">Manage Documents</h2>
+      <div className="h-pt border border-b mb-12"></div>
       {!documents || documents.length === 0 ? (
-        <p>No documents uploaded yet.</p>
+        <>
+          <div className="text-center">You have no documents uploaded yet. Upload PDFs to get started.</div>            
+          <div className="mt-4 mx-auto h-48">
+            <DocUpload onUploadComplete={(newDocs: any) => setDocuments([...documents, ...newDocs])} />
+          </div>
+        </>
       ) : (
         <>
-          <div className="space-y-2">
+          <h3 className="font-bold mb-2">Document Library</h3>
+          <div className="grid grid-cols-4 gap-4 mx-auto mb-6">
             {documents.map((doc) => (
-              <div key={doc.id} className="flex justify-between items-center border p-2 rounded">
-                <div>
-                  <span className="font-medium">{doc.filename}</span>
+              <div key={doc.id} className="border px-2 pt-4 pb-2 rounded h-full flex flex-col gap-4 items-center justify-between">
+                <div className="w-12 h-12 flex justify-center items-center bg-white rounded-lg border flex-shrink-0">
+                  <FileText className="w-8 h-8" />
                 </div>
-                <div className="flex gap-2">
+                <div className="text-center h-full">{doc.filename}</div>
+                <div className="ml-auto flex gap-2">
                   <button
                     onClick={() => handleView(doc.id)}
-                    className="bg-green-600 text-white px-2 py-1 rounded"
+                    className="px-2 py-1 rounded"
                   >
-                    View
+                    <Eye className="w-4 h-4 hover:text-gray-700 hover:scale-[1.05]" />
                   </button>
                   <button
                     onClick={() => handleDelete(doc.id)}
-                    className="bg-red-600 text-white px-2 py-1 rounded"
+                    className="border px-2 py-1 rounded hover:text-gray-700 hover:scale-[1.05]"
                   >
-                    Delete
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>

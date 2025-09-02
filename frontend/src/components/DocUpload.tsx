@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { uploadDocument } from "../apis";
 import type { Document } from "../types"; // adjust to your Document type
 import { toast } from "sonner";
-import { Upload } from 'lucide-react';
+import { Upload, FileText, X } from 'lucide-react';
 
 type DocumentUploadProps = {
   onUploadComplete: (newDocs: Document[]) => void;
@@ -75,75 +75,102 @@ export default function DocumentUpload({ onUploadComplete }: DocumentUploadProps
   };
 
   return (
-    <div className="border p-4 rounded mb-4">
-      <div
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:bg-gray-50"
-        onClick={() => inputRef.current?.click()}
-      >
-        
-        {selectedFiles.length
-          ? selectedFiles.map((f) => f.name).join(", ")
-          : <p className="text-gray-600">Drag & drop PDFs here, or click to browse</p>
-        }
-
-        <input
-          type="file"
-          id="file-input"
-          multiple
-          className="hidden"
-          ref={inputRef}
-          onChange={(e) => handleFiles(e.target.files)}
-          accept=".pdf" 
-        />
-        <label htmlFor="file-input" className="flex mt-2 mx-auto w-fit px-2 justify-center items-center border border-gray-300 cursor-pointer rounded">
-          <Upload className="w-4 h-4 mr-2" />
-          Choose Files
-        </label>
-      </div>
-
+    <div className="mb-4 h-full">
       {selectedFiles.length > 0 && (
-        <div className="mt-6 space-y-3">
-          {selectedFiles.map((file) => (
-            <div key={file.name} className="flex items-center justify-between bg-gray-100 rounded-lg p-3">
-              <div className="flex-1">
-                <p className="font-medium">{file.name}</p>
-                <p className="text-sm text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+        <>
+          <div className="mt-6 space-y-3 grid grid-cols-3 gap-4 max-w-3xl mx-auto">
+            {selectedFiles.map((file) => (
+              <div key={file.name} className="relative flex bg-gray-100 gap-2 rounded-lg h-full px-2 py-4">
+                <div className="w-8 h-8 flex justify-center items-center bg-white rounded-full border flex-shrink-0">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm">{file.name}</p>
+                  <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
 
-                {/* Progress bar */}
-                {uploading && (
-                  <div className="w-full bg-gray-200 rounded h-2 mt-2">
-                    <div
-                      className="bg-green-500 h-2 rounded transition-all"
-                      style={{ width: `${progress[file.name] || 0}%` }}
-                    ></div>
-                  </div>
+                  {/* Progress bar */}
+                  {uploading && (
+                    <div className="w-full bg-gray-200 rounded h-2 mt-2">
+                      <div
+                        className="bg-green-500 h-2 rounded transition-all"
+                        style={{ width: `${progress[file.name] || 0}%` }}
+                      ></div>
+                    </div>
+                  )}
+                </div>
+
+                {!uploading && (
+                  <button
+                    onClick={() => setSelectedFiles((prev) => prev.filter((f) => f.name !== file.name))}
+                    className="absolute right-2 top-2 mt-auto self-end text-gray-500 hover:text-gray-700 p-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 )}
               </div>
-
-              {!uploading && (
-                <button
-                  onClick={() => setSelectedFiles((prev) => prev.filter((f) => f.name !== file.name))}
-                  className="ml-4 text-red-600 hover:underline"
-                >
-                  Remove
-                </button>
-              )}
+            ))}
+          </div>
+          
+          <div className="max-w-3xl mx-auto flex gap-4">
+            <button
+              className="mt-6 w-full py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 disabled:opacity-50"
+              onClick={handleUpload}
+              disabled={uploading || !selectedFiles.length}
+            >
+              {uploading ? "Uploading..." : "Upload"}
+            </button>
+            <div className="min-w-fit">
+              <input
+                type="file"
+                id="file-input"
+                multiple
+                className="hidden"
+                ref={inputRef}
+                onChange={(e) => handleFiles(e.target.files)}
+                accept=".pdf" 
+              />
+              <label htmlFor="file-input" className="flex mt-6 w-full py-2 px-4 rounded-lg text-sm justify-center items-center border border-gray-300 cursor-pointer rounded hover:bg-gray-100">
+                <Upload className="w-4 h-4 mr-2" />
+                Add More Files
+              </label>
             </div>
-          ))}
-        </div>
+          </div>
+        </>
       )}
 
-      {selectedFiles.length > 0 && 
-        <button
-          className="mt-6 w-full py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
-          onClick={handleUpload}
-          disabled={uploading || !selectedFiles.length}
+      {selectedFiles.length == 0 && (
+        <div
+          onDrop={handleDrop}
+          onDragOver={(e) => e.preventDefault()}
+          className="p-8 text-center cursor-pointer h-full max-w-md border border-gray-300 p-4 rounded mx-auto flex flex-col justify-center items-center hover:bg-gray-50"
+          onClick={() => inputRef.current?.click()}
         >
-          {uploading ? "Uploading..." : "Upload"}
-        </button>
-      }
+          
+          {selectedFiles.length
+            ? selectedFiles.map((f) => f.name).join(", ")
+            : (
+              <div className="space-y-2">
+                <p className="font-bold text-regular">Upload your documents</p>
+                <p className="text-gray-600 text-xs">Drag & drop PDFs here, or click to browse</p>
+              </div>
+            )
+          }
+
+          <input
+            type="file"
+            id="file-input"
+            multiple
+            className="hidden"
+            ref={inputRef}
+            onChange={(e) => handleFiles(e.target.files)}
+            accept=".pdf" 
+          />
+          <label htmlFor="file-input" className="flex mt-4 mx-auto w-fit px-4 py-2 text-sm justify-center items-center border border-gray-300 cursor-pointer rounded hover:bg-gray-100">
+            <Upload className="w-4 h-4 mr-2" />
+            Choose Files
+          </label>
+        </div>
+    )}
     </div>
   );
 }
