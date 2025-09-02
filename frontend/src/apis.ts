@@ -3,8 +3,13 @@ import type { Citation, Document } from "./types";
 
 const baseURL = "http://localhost:8000"
 
+export const customAPI = axios.create({
+  baseURL,
+  withCredentials: true,
+});
+
 export const signUp = async (data: any) => {
-  const res = await axios.post(`${baseURL}/auth/signup`, data, {
+  const res = await customAPI.post(`${baseURL}/auth/signup`, data, {
     withCredentials: true,
   });
 
@@ -12,7 +17,7 @@ export const signUp = async (data: any) => {
 };
 
 export const login = async (data: any) => {
-  const res = await axios.post(`${baseURL}/auth/login`, data, {
+  const res = await customAPI.post(`${baseURL}/auth/login`, data, {
     withCredentials: true,
   });
 
@@ -20,7 +25,7 @@ export const login = async (data: any) => {
 };
 
 export const logout = async () => {
-  const res = await axios.post(`${baseURL}/auth/logout`, {}, {
+  const res = await customAPI.post(`${baseURL}/auth/logout`, {}, {
     withCredentials: true,
   });
 
@@ -28,7 +33,7 @@ export const logout = async () => {
 };
 
 export const refreshUser = async() => {
-  const res = await axios.get("/auth/me", {
+  const res = await customAPI.get("/auth/me", {
     withCredentials: true,
   });
 
@@ -39,7 +44,7 @@ export const uploadDocument = async (file: File): Promise<Document> => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await axios.post(`${baseURL}/documents/upload`, formData, {
+  const res = await customAPI.post(`${baseURL}/documents/upload`, formData, {
     withCredentials: true,
   });
 
@@ -47,16 +52,16 @@ export const uploadDocument = async (file: File): Promise<Document> => {
 };
 
 export const getDocuments = async (): Promise<Document[]> => {
-  const res = await axios.get(`${baseURL}/documents/`, { withCredentials: true });
+  const res = await customAPI.get(`${baseURL}/documents/`, { withCredentials: true });
   return res.data;
 };
 
 export const deleteDocument = async (docId: string) => {
-  await axios.delete(`${baseURL}/documents/${docId}`, { withCredentials: true });
+  await customAPI.delete(`${baseURL}/documents/${docId}`, { withCredentials: true });
 };
 
 export const getDocumentURL = async (docId: string) => {
-  const res = await axios.get(`${baseURL}/documents/${docId}`, {
+  const res = await customAPI.get(`${baseURL}/documents/${docId}`, {
     responseType: "blob",
     withCredentials: true 
   });
@@ -66,7 +71,7 @@ export const getDocumentURL = async (docId: string) => {
 };
 
 export const getDocumentText = async (docId: string): Promise<string> => {
-  const res = await axios.get(`${baseURL}/documents/${docId}/text`, { withCredentials: true });
+  const res = await customAPI.get(`${baseURL}/documents/${docId}/text`, { withCredentials: true });
   return res.data.text;
 };
 

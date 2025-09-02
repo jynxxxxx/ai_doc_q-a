@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { User } from "../types";
 import { refreshUser } from "../apis";
+import { customAPI } from "../apis";
 
 interface AuthContextValue {
   user: User | null;
@@ -30,6 +31,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     resetUser();
     const interval = setInterval(resetUser, 1000 * 60 * 5); // every 5 min
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interceptor = customAPI.interceptors.response.use(
+      (res) => res,
+      (err) => {
+        if (err.response && err.response.status === 401) {
+          setUser(null);
+        }
+        return Promise.reject(err);
+      }
+    );
+    return () => {
+      customAPI.interceptors.response.eject(interceptor);
+    };
   }, []);
 
   return (
