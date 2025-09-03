@@ -101,6 +101,12 @@ export const chatStream = async (
     signal
   });
 
+  if (res.status === 401) {
+    const error = new Error("Unauthorized");
+    (error as any).status = 401;
+    throw error;
+  }
+
   if (!res.body) throw new Error("No reader available");
 
   const reader = res.body.getReader();

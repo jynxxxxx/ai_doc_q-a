@@ -3,8 +3,10 @@ import { useState, useRef, useEffect } from "react";
 import type { ChatMessage } from "../types";
 import { chatStream } from "../apis";
 import { TypingVisual } from "./TypingVisual";
+import { useAuth } from "../context/AuthContext";
 
 export default function Chat() {
+  const {setUser} = useAuth()
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streamingAnswer, setStreamingAnswer] = useState("");
@@ -41,36 +43,43 @@ export default function Chat() {
       aiIndex = newMessages.length - 1;
       return newMessages;
     });
+    try {
+      await chatStream(
+        question,
+        (chunk) => {
+          setStreamingAnswer((prev) => prev + chunk);
 
-    await chatStream(
-      question,
-      (chunk) => {
-        setStreamingAnswer((prev) => prev + chunk);
+          setMessages((prev) => {
+            const newMessages = [...prev];
+            newMessages[aiIndex] = {
+              ...newMessages[aiIndex],
+              text: (newMessages[aiIndex].text || "") + chunk,
+            };
+            return newMessages;
+          });
+        },
+        (cits) => {
+          const citationArray = Array.isArray(cits) ? cits : [cits];
 
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          newMessages[aiIndex] = {
-            ...newMessages[aiIndex],
-            text: (newMessages[aiIndex].text || "") + chunk,
-          };
-          return newMessages;
-        });
-      },
-      (cits) => {
-        const citationArray = Array.isArray(cits) ? cits : [cits];
-
-        setMessages((prev) => {
-          const newMessages = [...prev];
-          newMessages[aiIndex] = {
-            ...newMessages[aiIndex],
-            citations: [...(newMessages[aiIndex].citations || []), ...citationArray],
-          };
-          return newMessages;
-        });
-      },
-      abortControllerRef.current.signal
-    );
-
+          setMessages((prev) => {
+            const newMessages = [...prev];
+            newMessages[aiIndex] = {
+              ...newMessages[aiIndex],
+              citations: [...(newMessages[aiIndex].citations || []), ...citationArray],
+            };
+            return newMessages;
+          });
+        },
+        abortControllerRef.current.signal
+      );
+    } catch (err: any) {
+      console.log("Chat error", err);
+      if (err?.response?.status === 401 || err?.status === 401) {
+        setUser(null);
+      } else {
+        console.error(err);
+      }
+    }
     setQuestion("");
     textareaRef.current?.focus();
   };
