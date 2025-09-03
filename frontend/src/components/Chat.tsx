@@ -83,8 +83,8 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col max-w-2xl p-4 h-[80vh]">
-      <div ref={chatContainerRef} className="flex-1 border rounded p-8 overflow-y-auto mb-2 flex flex-col gap-2">
+    <div className="flex flex-col flex-1 pt-4 px-4 h-[80vh] bg-[#FAFAF9]">
+      <div ref={chatContainerRef} className="flex-1 rounded p-8 overflow-y-auto mb-2 flex flex-col gap-2 ">
         {messages.length === 0 ? (
           <div className="text-gray-400 italic">
             Ask me about any of your uploaded documents
@@ -97,7 +97,7 @@ export default function Chat() {
             return (
               <>
                 <div key={idx} className={`mb-4 ${isUser ? "text-right" : "text-left"}`}>
-                  <div className={`inline-block bg-gray-100 px-2 py-1 rounded whitespace-pre-wrap ${isUser ? "max-w-md" : "max-w-lg"}`}>
+                  <div className={`inline-block px-2 py-1 rounded whitespace-pre-wrap ${isUser ? "max-w-md bg-[#F1DEDC]" : "max-w-lg bg-[#E5E7EB]"}`}>
                     {/* If assistant message is still streaming, animate */}
                     {isAI && idx === messages.length - 1 && streamingAnswer ? (
                       <TypingVisual text={streamingAnswer} speed={15} />
@@ -135,49 +135,46 @@ export default function Chat() {
       </div>
 
       {/* Input area */}
-      
-      <div className="sticky bottom-0 bg-white">
-        <div className="flex items-end gap-2 mb-4 px-2 py-1 border rounded">
-          <textarea
-            ref={textareaRef}
-            className="flex-1 resize-none px-2 py-1 max-h-[12rem] overflow-y-auto"
-            placeholder="Ask a question..."
-            value={question}
-            rows={1}
-            style={{ minHeight: "2.5rem" }}
-            onChange={(e) => {
-              setQuestion(e.target.value);
+      <div className="flex items-end gap-2 mb-4 px-2 py-1 border rounded bg-white ">
+        <textarea
+          ref={textareaRef}
+          className="flex-1 resize-none px-2 py-2 max-h-[12rem] overflow-y-auto focus:outline-none"
+          placeholder="Ask a question..."
+          value={question}
+          rows={1}
+          style={{ minHeight: "2.5rem" }}
+          onChange={(e) => {
+            setQuestion(e.target.value);
 
-              const el = e.target;
-              el.style.height = "auto";
-              el.style.height = `${Math.min(el.scrollHeight, 192)}px`; // max ~12rem (≈9 lines)
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
+            const el = e.target;
+            el.style.height = "auto";
+            el.style.height = `${Math.min(el.scrollHeight, 192)}px`; // max ~12rem (≈9 lines)
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
 
-                // reset height after submit
-                if (textareaRef.current) {
-                  textareaRef.current.style.height = "2.5rem";
-                }
+              // reset height after submit
+              if (textareaRef.current) {
+                textareaRef.current.style.height = "2.5rem";
               }
-            }}
-          />
-          <div className="flex gap-2 h-[2.5rem]">
-            <button
-              className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-              onClick={handleSend}
-            >
-              Send
-            </button>
-            <button
-              className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-700"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          </div>
+            }
+          }}
+        />
+        <div className="flex gap-2 h-[2.5rem] items-center">
+          <button
+            className="bg-[#2f1847] h-[2rem] text-white text-sm px-4 py-1 rounded hover:bg-[#2f1847]/80"
+            onClick={handleSend}
+          >
+            Send
+          </button>
+          <button
+            className="bg-gray-500 h-[2rem] text-white text-sm px-4 py-1 rounded hover:bg-gray-700"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </div>
 

@@ -15,7 +15,7 @@ function App() {
       <Toaster position="top-center"/>
       <Router>
         <NavBar/>
-        <div className='ml-[15vw]'>
+        <div className='ml-[15vw] bg-[#EFEFEF] min-h-screen'>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/documents" element={user ? <DocPage /> : <Navigate to="/login" />} />

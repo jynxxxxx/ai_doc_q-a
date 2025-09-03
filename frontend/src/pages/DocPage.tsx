@@ -41,13 +41,14 @@ export default function DocPage() {
       <div className="relative w-full">
         <h2 className="text-left text-xl font-bold ml-12 mb-4 ">Manage Documents</h2>
         <div 
-          className="absolute top-0 right-0 w-fit text-xs flex justify-center items-center gap-1 rounded-lg border p-2 bg-white text-gray-700 hover:text-gray-500 hover:border-gray-500 hover:cursor-pointer"
+          className="absolute top-0 right-0 w-fit text-xs flex justify-center items-center gap-1 rounded-lg border p-2 bg-[#512153] text-white hover:border-gray-500 hover:cursor-pointer"
           onClick={()=> setOpenUpload(true)}
         >
           <Plus className="w-4 h-4" />
           <span className="">Upload Documents</span>
         </div>
       </div>
+
       <div className="h-pt border border-b mb-12"></div>
 
       {!documents || documents.length === 0 ? (
@@ -64,13 +65,15 @@ export default function DocPage() {
         </>
       ) : (
         <>
-          <div className="grid grid-cols-4 gap-4 mx-auto mb-6">
+          <div className="grid grid-cols-3 gap-4 mx-auto mb-6">
             {documents.map((doc) => (
-              <div key={doc.id} className="border px-2 pt-4 pb-2 rounded h-full flex flex-col gap-4 items-center justify-between">
-                <div className="w-12 h-12 flex justify-center items-center bg-white rounded-lg border flex-shrink-0">
-                  <FileText className="w-8 h-8" />
+              <div key={doc.id} className="bg-white border-gray-100 px-4 pt-6 pb-2 rounded h-full flex flex-col gap-2 justify-between shadow-lg">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 flex justify-center items-center bg-white text-[#512153] rounded-full border border-2 flex-shrink-0">
+                    <FileText className="w-8 h-8" />
+                  </div>
+                  <div className="h-full">{doc.filename}</div>
                 </div>
-                <div className="text-center h-full">{doc.filename}</div>
                 <div className="ml-auto flex gap-2">
                   <button
                     onClick={() => handleView(doc.id)}

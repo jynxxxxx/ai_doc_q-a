@@ -80,8 +80,8 @@ export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
         <>
           <div className="mt-6 space-y-3 grid grid-cols-3 gap-4 max-w-3xl mx-auto">
             {selectedFiles.map((file) => (
-              <div key={file.name} className="relative flex bg-gray-100 gap-2 rounded-lg h-full px-2 py-4">
-                <div className="w-8 h-8 flex justify-center items-center bg-white rounded-full border flex-shrink-0">
+              <div key={file.name} className="relative flex border border-gray-200 shadow-lg gap-2 rounded-lg h-full px-2 py-4">
+                <div className="w-8 h-8 flex justify-center text-[#512153] items-center bg-white rounded-full border flex-shrink-0">
                   <FileText className="w-5 h-5" />
                 </div>
                 <div>
@@ -92,7 +92,7 @@ export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
                   {uploading && (
                     <div className="w-full bg-gray-200 rounded h-2 mt-2">
                       <div
-                        className="bg-green-500 h-2 rounded transition-all"
+                        className="bg-[#d63af9] h-2 rounded transition-all"
                         style={{ width: `${progress[file.name] || 0}%` }}
                       ></div>
                     </div>
@@ -113,7 +113,7 @@ export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
           
           <div className="max-w-3xl mx-auto flex gap-4">
             <button
-              className="mt-6 w-full py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 disabled:opacity-50"
+              className="mt-6 w-full py-2 rounded-lg bg-[#2f1847] text-white text-sm hover:bg-[#2f1847]/80 disabled:opacity-50"
               onClick={handleUpload}
               disabled={uploading || !selectedFiles.length}
             >
@@ -129,7 +129,7 @@ export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
                 onChange={(e) => handleFiles(e.target.files)}
                 accept=".pdf" 
               />
-              <label htmlFor="file-input" className="flex mt-6 w-full py-2 px-4 rounded-lg text-sm justify-center items-center border border-gray-300 cursor-pointer rounded hover:bg-gray-100">
+              <label htmlFor="file-input" className="flex mt-6 w-full py-2 px-4 rounded-lg bg-white text-sm justify-center items-center border border-gray-300 cursor-pointer rounded hover:bg-gray-100">
                 <Upload className="w-4 h-4 mr-2" />
                 Add More Files
               </label>
@@ -142,7 +142,7 @@ export default function DocUpload({ onUploadComplete }: DocumentUploadProps) {
         <div
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
-          className="p-8 text-center cursor-pointer h-full max-w-md border border-gray-300 p-4 rounded mx-auto flex flex-col justify-center items-center hover:bg-gray-50"
+          className="p-8 text-center bg-white cursor-pointer h-full max-w-md border border-gray-300 p-4 rounded mx-auto flex flex-col justify-center items-center hover:bg-gray-50"
           onClick={() => inputRef.current?.click()}
         >
           

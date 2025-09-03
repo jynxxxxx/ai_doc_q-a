@@ -46,53 +46,55 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8">
-      <div className="mb-8 text-center text-2xl font-bold">
-        {mode === "login" 
-          ? <div>Login</div>
-          : <div>Sign Up</div>
-        }
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-2">
-        {mode === "signup" &&
+    <div className="pt-[25vh] p-8">
+      <div className="p-8 text-center bg-white max-w-md mx-auto rounded shadow space-y-4">
+        <div className="mb-8 text-center text-2xl font-bold">
+          {mode === "login" 
+            ? <div>Login</div>
+            : <div>Sign Up</div>
+          }
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-2">
+          {mode === "signup" &&
+            <input
+              type="name"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="border p-2 w-full rounded bg-white"
+            />
+          }
           <input
-            type="name"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            className="border p-2 w-full"
+            className="border p-2 w-full rounded bg-white"
           />
-        }
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="border p-2 w-full"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="border p-2 w-full"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full disabled:opacity-50"
-        >
-          {loading ? "Loading..." : mode === "login" ? "Login" : "Sign Up"}
-        </button>
-      </form>
-      <div className="mt-4 text-center">
-        {mode === "login" 
-          ? <span>Not registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("signup")}>sign up.</button></span>
-          : <span>Already registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("login")}>login.</button></span>
-        }
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="border p-2 w-full rounded bg-white"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-[#512153] text-white px-4 py-2 rounded hover:bg-[#512153]/80 w-full disabled:opacity-50"
+          >
+            {loading ? "Loading..." : mode === "login" ? "Login" : "Sign Up"}
+          </button>
+        </form>
+        <div className="mt-4 text-center">
+          {mode === "login" 
+            ? <span>Not registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("signup")}>sign up.</button></span>
+            : <span>Already registered?{" "}Click here to <button className="underline hover:text-blue-500" onClick={() => setMode("login")}>login.</button></span>
+          }
+        </div>
       </div>
     </div>
   );

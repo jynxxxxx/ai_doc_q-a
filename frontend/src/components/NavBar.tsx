@@ -21,12 +21,12 @@ export default function NavBar() {
   }
 
   return (
-    <div className="fixed top-0 h-full left-0 w-[15vw] bg-gray-200 flex flex-col justify-between p-8">
+    <div className="fixed top-0 h-full left-0 w-[15vw] bg-[#512153] flex flex-col justify-between p-8 text-white font-bold">
       <div className="flex flex-col gap-8">
-        <div className="hover:text-gray-500" onClick={()=> navigate("/documents")}>Documents</div>
-        <div className="hover:text-gray-500" onClick={()=> navigate("/chat")}>Chats</div>
+        <div className="hover:text-gray-300 hover:cursor-pointer" onClick={()=> navigate("/documents")}>Documents</div>
+        <div className="hover:text-gray-300 hover:cursor-pointer" onClick={()=> navigate("/chat")}>Chats</div>
       </div>
-      {user && <div className="hover:text-gray-500" onClick={handleLogout}>Logout</div>}
+      {user && <div className="hover:text-gray-300 hover:cursor-pointer" onClick={handleLogout}>Logout</div>}
     </div>
   )
 }
