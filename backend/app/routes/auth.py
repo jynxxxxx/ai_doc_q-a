@@ -64,6 +64,7 @@ async def login(response: Response, data: dict = Body(...)):
             key="refresh_token",
             value=res.session.refresh_token if res.session else "",
             httponly=True,
+            samesite="None",
         )
 
         response.set_cookie(
@@ -97,6 +98,7 @@ async def get_me(request: Request, response: Response):
         key="refresh_token",
         value=res.session.refresh_token if res.session else "",
         httponly=True,
+        samesite="None",
     )
 
     return {
@@ -117,7 +119,7 @@ async def logout(response: Response):
         key="access_token",
         httponly=True,
         secure=True,           
-        samesite="none"       
+        samesite="None",
     )
 
     return {
